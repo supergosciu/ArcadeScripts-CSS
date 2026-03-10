@@ -17,7 +17,7 @@ public class FidgetSpinner : ScriptBase
 
     private float SpinnerSpeed = 0.0f;
     private const int MinSpeedToSpin = 37500;
-    private const float SpeedIncreasePerTic = 0.1f;
+    private const float SpeedIncreasePerTick = 0.1f;
     private const float SpeedDecreasePerTick = -0.05f;
     private const float MinSpeed = 0.0f;
     private const float MaxSpeed = 1.0f;
@@ -92,7 +92,7 @@ public class FidgetSpinner : ScriptBase
             return;
         }
 
-        AddToSpinnerSpeed(SpeedIncreasePerTic);
+        AddToSpinnerSpeed(SpeedIncreasePerTick);
     }
 
     public override void Remove()
