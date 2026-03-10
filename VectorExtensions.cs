@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 
 public static class VectorExtensions
@@ -44,11 +42,5 @@ public static class VectorExtensions
     public static float DistanceTo(Vector a, Vector b)
     {
         return (float)Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2) + Math.Pow(a.Z - b.Z, 2));
-    }
-
-    public static bool GetPlayerPawn(this CCSPlayerController? player, [NotNullWhen(true)] out CCSPlayerPawn? pawn)
-    {
-        pawn = player?.PlayerPawn.Value;
-        return player != null && player.IsValid && player.Connected == PlayerConnectedState.PlayerConnected && pawn != null && pawn.IsValid;
     }
 }
