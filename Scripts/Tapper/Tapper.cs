@@ -487,7 +487,7 @@ public partial class Tapper : ScriptBase
         CCSPlayerPawn? pawn = player.PlayerPawn.Value;
         if (pawn == null || !pawn.IsValid) return -1;
 
-        Vector playerOrigin = player.AbsOrigin!;
+        Vector playerOrigin = pawn.AbsOrigin!;
         float gameY = playerOrigin.Y - BoothAreaMin.Y;
         float boothRatio = gameY / (BoothAreaMax.Y - BoothAreaMin.Y);
         float booth = boothRatio * 4.0f;
@@ -603,4 +603,5 @@ public partial class Tapper : ScriptBase
 
         ArcadeScripts.Instance.OnAllEntitiesSpawnedEvent -= OnAllEntitiesSpawned;
     }
+
 }
