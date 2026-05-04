@@ -11,8 +11,8 @@
     <ItemGroup>
       <PackageReference Include="CounterStrikeSharp.API" Version="*" />
 
-      <Reference Include="CS2TraceRay">
-        <HintPath>CS2TraceRay.dll</HintPath>
+      <Reference Include="RayTraceApi">
+        <HintPath>RayTraceApi.dll</HintPath>
       </Reference>
     </ItemGroup>
 
