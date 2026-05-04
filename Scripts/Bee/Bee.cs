@@ -4,8 +4,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
-using CS2TraceRay.Class;
-using CS2TraceRay.Struct;
+using RayTraceAPI;
 
 using static ArcadeScripts.Random;
 using static ArcadeScripts.TextDisplayHelper;
@@ -139,16 +138,24 @@ public partial class Bee : ScriptBase
         PauseButtonModel.AddEntityIOEvent(inputName: "Skin", value: "0");
     }
 
-    public static CGameTrace GetEyePosition(CCSPlayerPawn pawn)
+    public static TraceResult? GetEyePosition(CCSPlayerPawn pawn)
     {
+        CRayTraceInterface? rayTrace = ArcadeScripts.RayTraceInterface.Get();
+        if (rayTrace == null)
+            return null;
         Vector absOrigin = pawn.AbsOrigin!;
         CNetworkViewOffsetVector viewOffset = pawn.ViewOffset;
         Vector eyePosition = new(absOrigin.X + viewOffset.X, absOrigin.Y + viewOffset.Y, absOrigin.Z + viewOffset.Z);
         ulong mask = pawn.Collision.CollisionAttribute.InteractsWith;
         ulong contents = pawn.Collision.CollisionGroup;
         QAngle eyeAngles = pawn.EyeAngles;
+        TraceOptions options = new()
+        {
+            InteractsWith = mask
+        };
 
-        return TraceRay.TraceShape(eyePosition, eyeAngles, mask, contents, pawn.Handle);
+        rayTrace.TraceShape(eyePosition, eyeAngles, pawn, options, out TraceResult result);
+        return result;
     }
 
     public void PressButton(CEntityInstance? activator, int booth)
@@ -172,11 +179,11 @@ public partial class Bee : ScriptBase
         MeasureEntities[booth - 1].AddEntityIOEvent(inputName: "SetMeasureTarget", value: $"bee_player_{booth}", delay: 0.01f, activator: activator);
 
         //Cast a ray from the player's eyes in the direction they are looking
-        CGameTrace Hit = GetEyePosition(activator.As<CCSPlayerPawn>());
+        TraceResult? Hit = GetEyePosition(activator.As<CCSPlayerPawn>());
 
         //Get the key corresponding to the hit
-        int column = (int)((value.Y - Hit.EndPos.Y) / KeySize);
-        int row = (int)((value.Z - Hit.EndPos.Z) / KeySize);
+        int column = (int)((value.Y - Hit!.Value.EndPos.Y) / KeySize);
+        int row = (int)((value.Z - Hit.Value.EndPos.Z) / KeySize);
         if (column < 0) column = 0;
         if (column > 9) column = 9;
         if (row < 0) row = 0;
@@ -2209,7 +2216,8 @@ public partial class Bee : ScriptBase
         DisplayWord(1);
         DisplayProblem(1);
 
-        TraceRay.TraceShape(Vector.Zero, QAngle.Zero, 1, 0);
+        CRayTraceInterface? rayTrace = ArcadeScripts.RayTraceInterface.Get();
+        rayTrace?.TraceShape(Vector.Zero, QAngle.Zero, null, new(), out TraceResult result);
     }
 
     public override void Remove()
