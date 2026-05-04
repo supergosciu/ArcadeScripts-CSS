@@ -1,6 +1,8 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
 using CounterStrikeSharp.API.Modules.Memory;
+using CounterStrikeSharp.API.Core.Capabilities;
+using RayTraceAPI;
 
 namespace ArcadeScripts;
 
@@ -16,7 +18,9 @@ public partial class ArcadeScripts : BasePlugin
 {
     public override string ModuleName => "jb_arcade_b6 Scripts";
     public override string ModuleAuthor => "Supergosciuツ";
-    public override string ModuleVersion => "1.0";
+    public override string ModuleVersion => "1.0.2";
+
+    internal static PluginCapability<CRayTraceInterface> RayTraceInterface { get; } = new("raytrace:craytraceinterface");
 
     public static ArcadeScripts Instance = null!;
     private Dictionary<CLogicScript, ScriptBase> Scripts = [];
