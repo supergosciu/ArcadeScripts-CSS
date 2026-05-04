@@ -46,7 +46,7 @@ public class RocketJump : ScriptBase
         float time = Server.CurrentTime;
         if (time < LastRocket + 0.7f) return;
 
-        Sound.Teleport(Item.AbsOrigin);
+        Sound.Teleport(SpecialPlayer.AbsOrigin);
         Sound.AddEntityIOEvent(inputName: "PlaySound", delay: 0.0f, activator: Sound, caller: Sound);
         LastRocket = time;
         Vector directionFacing = ShotDirection.AbsRotation!.GetForwardVector();
