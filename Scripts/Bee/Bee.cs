@@ -4,8 +4,6 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Utils;
 using Timer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
-using RayTraceAPI;
-
 using static ArcadeScripts.Random;
 using static ArcadeScripts.TextDisplayHelper;
 
@@ -140,9 +138,6 @@ public partial class Bee : ScriptBase
 
     public static TraceResult? GetEyePosition(CCSPlayerPawn pawn)
     {
-        CRayTraceInterface? rayTrace = ArcadeScripts.RayTraceInterface.Get();
-        if (rayTrace == null)
-            return null;
         Vector absOrigin = pawn.AbsOrigin!;
         CNetworkViewOffsetVector viewOffset = pawn.ViewOffset;
         Vector eyePosition = new(absOrigin.X + viewOffset.X, absOrigin.Y + viewOffset.Y, absOrigin.Z + viewOffset.Z);
@@ -151,10 +146,10 @@ public partial class Bee : ScriptBase
         QAngle eyeAngles = pawn.EyeAngles;
         TraceOptions options = new()
         {
-            InteractsWith = mask
+            InteractsWith = (Contents)mask
         };
 
-        rayTrace.TraceShape(eyePosition, eyeAngles, pawn, options, out TraceResult result);
+        TraceResult result = Trace.TraceShape(eyePosition, eyeAngles, pawn, options);
         return result;
     }
 
@@ -2216,8 +2211,7 @@ public partial class Bee : ScriptBase
         DisplayWord(1);
         DisplayProblem(1);
 
-        CRayTraceInterface? rayTrace = ArcadeScripts.RayTraceInterface.Get();
-        rayTrace?.TraceShape(Vector.Zero, QAngle.Zero, null, new(), out TraceResult result);
+        Trace.TraceShape(Vector.Zero, QAngle.Zero);
     }
 
     public override void Remove()
